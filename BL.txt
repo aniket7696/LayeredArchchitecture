@@ -1,0 +1,166 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using EmployeeManagementSystem.Entities;
+using EmployeeManagementSystem.Exceptions;
+using EmployeeManagementSystem.DataAccessLayer;
+
+namespace EmployeeManagementSystem.BusinessLayer
+{
+    public class EmployeeBL
+    {
+        public static bool ValidateEmployee(Employee objEmployee)
+        {
+            StringBuilder objSB = new StringBuilder();
+            bool validEmployee = true;
+            if (objEmployee.Id <= 0)
+            {
+                validEmployee = false;
+                objSB.Append(Environment.NewLine + "Invalid Employee Id");
+
+            }
+            if (objEmployee.Name == string.Empty)
+            {
+                validEmployee = false;
+                objSB.Append(Environment.NewLine + "Employee Name Required");
+
+            }
+            if (objEmployee.DesignationId.ToString().Length < 4)
+            {
+                validEmployee = false;
+                objSB.Append(Environment.NewLine + "Required 4 Digit Designation Id");
+
+            }
+            if (objEmployee.DepartmentId.ToString().Length < 4)
+            {
+                validEmployee = false;
+                objSB.Append(Environment.NewLine + "Required 4 Digit Department Id");
+
+            }
+            if (validEmployee == false)
+            {
+                throw new EmployeeManagementSystemException(objSB.ToString());
+            }
+
+            return validEmployee;
+
+        }
+
+        public static bool AddEmployeeBL(Employee objEmployee)
+        {
+            bool employeeAdded = false;
+            try
+            {
+                if (ValidateEmployee(objEmployee))
+                {
+                    EmployeeDAL objEmployeeDAL = new EmployeeDAL();
+                    employeeAdded = objEmployeeDAL.AddEmployeeDAL(objEmployee);
+                }
+
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtEx)
+            {
+                throw objEmpMgmtEx;
+            }
+            catch (Exception objEx)
+            {
+                throw objEx;
+            }
+            return employeeAdded;
+
+        }
+        public static Employee SearchEmployeeBL(int id)
+        {
+            Employee objEmployee;
+            try
+            {
+                EmployeeDAL objEmplyeeDAL = new EmployeeDAL();
+                objEmployee = objEmplyeeDAL.SearchEmployeeDAL(id);
+
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtEx)
+            {
+                throw objEmpMgmtEx;
+            }
+            catch (Exception objEx)
+            {
+                throw objEx;
+            }
+            return objEmployee;
+
+        }
+        public static bool UpdateEmployeeBL(Employee objEmployee)
+        {
+            bool employeeUpdated = false;
+            try
+            {
+                if (ValidateEmployee(objEmployee))
+                {
+                    EmployeeDAL objEmployeeDAL = new EmployeeDAL();
+                    employeeUpdated = objEmployeeDAL.UpdateEmployeeDAL(objEmployee);
+                }
+
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtEx)
+            {
+                throw objEmpMgmtEx;
+            }
+            catch (Exception objEx)
+            {
+                throw objEx;
+            }
+            return employeeUpdated;
+
+
+        }
+        public static bool DeleteEmployeeBL(int id)
+        {
+            bool employeeDeleted = false;
+            
+            try
+            {
+                if (id > 0)
+                {
+                    EmployeeDAL objEmployeeDAL = new EmployeeDAL();
+                    employeeDeleted = objEmployeeDAL.DeleteEmployeeDAL(id);
+                }
+                else
+                {
+                    throw new EmployeeManagementSystemException("Invalid ID");
+                }
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtEx)
+            {
+                throw objEmpMgmtEx;
+            }
+            catch (Exception objEx)
+            {
+                throw objEx;
+            }
+            return employeeDeleted;
+
+        }
+        public static List<Employee> GetAllEmployeeBL()
+        {
+            List<Employee> objEmployeeList;
+            try
+            {
+                EmployeeDAL objEmployeeDAL = new EmployeeDAL();
+                objEmployeeList = objEmployeeDAL.GetAllEmployeeDAL();
+
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtEx)
+            {
+                throw objEmpMgmtEx;
+            }
+            catch (Exception objEx)
+            {
+                throw objEx;
+            }
+            return objEmployeeList;
+
+        }
+    }
+}

@@ -1,0 +1,228 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using EmployeeManagementSystem.Entities;
+using EmployeeManagementSystem.Exceptions;
+using EmployeeManagementSystem.DataAccessLayer;
+using EmployeeManagementSystem.BusinessLayer;
+
+namespace EmployeeManagementSystem.PresentationLayer
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            char choice;
+            do
+            {
+                PrintMenu();
+                Console.WriteLine("Enter Your Valuable Choice");
+                int taskFlag;
+                taskFlag = Convert.ToInt32(Console.ReadLine());
+                switch (taskFlag)
+                {
+                    case 1:
+                        //Add
+                        AddEmployee();
+                        break;
+                    case 2:
+                        //Search
+                        SearchEmployee();
+                        break;
+                    case 3:
+                        //Update
+                        UpdateEmployee();
+                        break;
+                    case 4:
+                        //Delete
+                        DeleteEmployee();
+                        break;
+                    case 5:
+                        //List
+                        ListEmployee();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid Choice");
+                        break;
+                }
+                Console.WriteLine("DO YOU WANT TO CONTINUE?? PRESS 'y' FOR YES AND 'n' FOR NO");
+                choice = Convert.ToChar(Console.ReadLine());
+            } while (choice=='y' || choice =='Y');
+        }
+        static void PrintMenu()
+        {
+            Console.WriteLine("Enter Your Choice \n");
+            Console.WriteLine("1 for ADD \n");
+            Console.WriteLine("2 for Search \n");
+            Console.WriteLine("3 for Update \n");
+            Console.WriteLine("4 for Delete \n");
+            Console.WriteLine("5 for List \n");
+
+        }
+        static void AddEmployee()
+        {
+            try
+            {
+                Employee objEmployee = new Employee();
+                Console.WriteLine("Enter Employee Details ");
+                Console.WriteLine("Enter Employee Id ");
+                objEmployee.Id = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter Employee Name ");
+                objEmployee.Name = Console.ReadLine();
+                Console.WriteLine("Enter Employee DepartmentId ");
+                objEmployee.DepartmentId = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter Employee DesignationId ");
+                objEmployee.DesignationId = Convert.ToInt32(Console.ReadLine());
+                bool employeeAdded;
+                employeeAdded = EmployeeBL.AddEmployeeBL(objEmployee);
+                if (employeeAdded)
+                {
+                    Console.WriteLine("Employyee Added Successfully");
+                }
+                else
+                {
+                    Console.WriteLine("Employyee Not Added!!! ");
+                }
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtSystmEx)
+            {
+                Console.WriteLine(objEmpMgmtSystmEx.Message);
+            }
+
+        }
+        static void SearchEmployee()
+        {
+            try
+            {
+                int id;
+                Console.WriteLine("Enter Employee Id");
+                id = Convert.ToInt32(Console.ReadLine());
+                Employee objEmployee;
+                objEmployee = EmployeeBL.SearchEmployeeBL(id);
+                if (objEmployee != null)
+                {
+                    Console.WriteLine("Employee Details");
+                    Console.WriteLine("ID: " + objEmployee.Id);
+                    Console.WriteLine("Name: " + objEmployee.Name);
+                    Console.WriteLine("Department Id: " + objEmployee.DepartmentId);
+                    Console.WriteLine(" Designation ID: " + objEmployee.DesignationId);
+                }
+                else
+                {
+                    Console.WriteLine("Employyee Not Found!!! ");
+                }
+
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtSystmEx)
+            {
+                Console.WriteLine(objEmpMgmtSystmEx.Message);
+            }
+        }
+        static void UpdateEmployee()
+        {
+            try
+            {
+                int id;
+                Employee objEmployee;
+                Console.WriteLine("Enter Id \n");
+                id = Convert.ToInt32(Console.ReadLine());
+                objEmployee = EmployeeBL.SearchEmployeeBL(id);
+                if (objEmployee != null)
+                {
+                    Console.WriteLine("Enter Employee Details \n");
+                    Console.WriteLine("Enter Employee Name \n ");
+                    objEmployee.Name = Console.ReadLine();
+                    Console.WriteLine("Enter Employee DepartmentId \n");
+                    objEmployee.DepartmentId = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Enter Employee DesignationId \n");
+                    objEmployee.DesignationId = Convert.ToInt32(Console.ReadLine());
+                    bool employeeUpdated;
+                    employeeUpdated = EmployeeBL.UpdateEmployeeBL(objEmployee);
+                    if (employeeUpdated)
+                    {
+                        Console.WriteLine("Employyee Updated Successfully \n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Employyee Not Updated!!! \n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Data Couldn't be Found!! \n");
+                }
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtSystmEx)
+            {
+                Console.WriteLine(objEmpMgmtSystmEx.Message);
+            }
+
+        }
+        static void DeleteEmployee()
+        {
+            try
+            {
+                bool employeeDeleted;
+                int id;
+                Console.WriteLine("Enter ID");
+                id = Convert.ToInt32(Console.ReadLine());
+                Employee objEmployee = EmployeeBL.SearchEmployeeBL(id);
+                if (objEmployee != null)
+                {
+                    employeeDeleted = EmployeeBL.DeleteEmployeeBL(id);
+                    if (employeeDeleted)
+                    {
+                        Console.WriteLine("Employee Data Deleted");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Employee Data couln't be Deleted");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Employee Data is not present");
+                }
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtSystmEx)
+            {
+                Console.WriteLine(objEmpMgmtSystmEx.Message);
+
+
+            }
+
+        }
+        static void ListEmployee()
+        {
+            try
+            {
+                List<Employee> objEmployeeList;
+                objEmployeeList = EmployeeBL.GetAllEmployeeBL();
+                if (objEmployeeList != null)
+                {
+                    Console.WriteLine("Employee Data List");
+                    foreach (Employee objEmployee in objEmployeeList)
+                    {
+                        Console.WriteLine("ID: " + objEmployee.Id);
+                        Console.WriteLine("Name: " + objEmployee.Name);
+                        Console.WriteLine("Department Id: " + objEmployee.DepartmentId);
+                        Console.WriteLine("Designation ID: " + objEmployee.DesignationId);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Employee Record is not present");
+                }
+            }
+            catch (EmployeeManagementSystemException objEmpMgmtSystmEx)
+            {
+                Console.WriteLine(objEmpMgmtSystmEx.Message);
+            }
+
+        }
+    }
+}
+    
+

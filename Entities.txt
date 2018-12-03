@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EmployeeManagementSystem.Entities
+{
+    public class Employee
+    {
+        private int _id;
+        private string _name;
+        private int _designationId;
+        private int _departmentId;
+
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+            }
+        }
+
+        public int DesignationId
+        {
+            get
+            {
+                return _designationId;
+            }
+            set
+            {
+                _designationId = value;
+            }
+        }
+
+        public int DepartmentId
+        {
+            get
+            {
+                return _departmentId;
+            }
+            set
+            {
+                _departmentId = value;
+            }
+        }
+    }
+}

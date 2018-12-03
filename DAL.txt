@@ -1,0 +1,91 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using EmployeeManagementSystem.Entities;
+using EmployeeManagementSystem.Exceptions;
+
+namespace EmployeeManagementSystem.DataAccessLayer
+{
+    public class EmployeeDAL
+    {
+        public static List<Employee> objEmployeeList = new List<Employee>();
+
+        public bool AddEmployeeDAL(Employee objEmployee = null) 
+        {
+            bool employeeAdded = false;
+            try
+            {
+                objEmployeeList.Add(objEmployee);
+                employeeAdded = true;
+            }
+            catch(SystemException objEx)
+            {
+                throw new EmployeeManagementSystemException(objEx.Message);
+            }
+            return employeeAdded;
+        }
+
+        public Employee SearchEmployeeDAL(int id)
+        {
+            Employee objEmployee = null;
+            try
+            {
+                objEmployee = objEmployeeList.Find(emp => emp.Id.Equals(id));
+            }
+            catch(SystemException objEx)
+            {
+                throw new EmployeeManagementSystemException(objEx.Message);
+            }
+            return objEmployee;
+        }
+
+        public bool UpdateEmployeeDAL(Employee objEmployee)
+        {
+            bool employeeUpdated = false;
+            try
+            {
+            for(int i=0;i<objEmployeeList.Count;i++)
+                {
+                    if (objEmployeeList[i].Id == objEmployee.Id)
+                    {
+                        objEmployeeList[i].Name = objEmployee.Name;
+                        objEmployeeList[i].DesignationId = objEmployee.DesignationId;
+                        objEmployeeList[i].DepartmentId = objEmployee.DepartmentId;
+                        employeeUpdated = true;
+                    }
+
+                }
+            }
+            catch (SystemException objEx)
+            {
+                throw new EmployeeManagementSystemException(objEx.Message);
+            }
+            return employeeUpdated;
+            
+        }
+
+        public bool DeleteEmployeeDAL(int id)
+        {
+            bool employeeDeleted = false;
+            Employee objEmployee = null;
+            try
+            {
+                objEmployee = objEmployeeList.Find(emp => emp.Id.Equals(id));
+                objEmployeeList.Remove(objEmployee);
+                employeeDeleted = true;
+            }
+            catch (SystemException objEx)
+            {
+                throw new EmployeeManagementSystemException(objEx.Message);
+            }
+            return employeeDeleted;
+        }
+
+        public List<Employee> GetAllEmployeeDAL()
+        {
+            return objEmployeeList;
+        }
+    }
+}

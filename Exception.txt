@@ -1,0 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EmployeeManagementSystem.Exceptions
+{
+    public class EmployeeManagementSystemException:ApplicationException
+    {
+         public EmployeeManagementSystemException() : base()
+        {
+
+        }
+
+        public EmployeeManagementSystemException(string message) : base(message)
+        {
+
+        }
+
+        public EmployeeManagementSystemException(string message, Exception objEx) : base(message, objEx)
+        {
+
+        }
+    }
+}
